@@ -92,7 +92,7 @@ var Movie = React.createClass({
     },
     render: function () {
         return (
-            React.createElement("Movie", {
+            React.createElement("li", {
                     key: this.props.movie.id
                 },
                 React.createElement(MovieTitle, {
