@@ -1,22 +1,5 @@
 "use script"
 
-
-//Tworzymy listę naszych ulubionych filmów
-//var element =
-//  React.createElement('div', {},
-//    React.createElement('h1', {}, 'Lista filmów'),
-//  React.createElement('ul', {},
-//    React.createElement('li', {},
-//      React.createElement('h2', {}, 'Harry Potter'),
-//    React.createElement('p', {}, 'Film o czarodzieju')
-//),
-//React.createElement('li', {},
-//  React.createElement('h2', {}, 'Król Lew'),
-//React.createElement('p', {}, 'Film opowiadający historię króla sawanny')
-//)
-// )
-// ); //Za pomocą metody createElement tworzymy obiekt
-//ReactDOM.render(element, document.getElementById('app')); //mamy już gotowy element, możemy wyrenderować go w odpowiednim miejscu w drzewie DOM. Tym właśnie zajmuje się metoda render, która jako parametry przyjmuje: ReactElement (np. ten który stworzyliśmy linijkę wyżej),węzeł drzewa DOM, do którego element ma się "wpiąć".
 var movies = [{
         id: 1,
         title: 'Django Unchained',
@@ -48,22 +31,95 @@ var movies = [{
     }
 ];
 
-var moviesElements = movies.map(function (movie) {
-    return React.createElement('li', {
-            key: movie.id
-        },
-        React.createElement('h2', {}, movie.title),
-        React.createElement('p', {}, movie.desc),
-        React.createElement('img', {
-            src: movie.image,
-        })
-    );
+var MovieTitle = React.createClass({
+    propTypes: {
+        movie: React.PropTypes.string.isRequired,
+    },
+    render: function () {
+        return (
+            React.createElement('h2', {}, this.props.movie)
+        );
+    }
 });
+
+var MovieDescription = React.createClass({
+    propTypes: {
+        desc: React.PropTypes.string.isRequired,
+    },
+    render: function () {
+        return (
+            React.createElement('p', {}, this.props.desc)
+        );
+    }
+});
+
+var MovieImage = React.createClass({
+    propTypes: {
+        image: React.PropTypes.string.isRequired,
+    },
+    render: function () {
+        return (
+            React.createElement('img', {
+                src: this.props.image
+            }, )
+        );
+    }
+});
+
+var MoviesList = React.createClass({
+    propTypes: {
+        list: React.PropTypes.array.isRequired,
+    },
+    render: function () {
+        var moviesElements = this.props.list.map(function (movie) {
+            return (
+                React.createElement(Movie, {
+                    movie: movie,
+                    key: movie.id
+                })
+            )
+        });
+        return (
+            React.createElement('ul', {}, moviesElements)
+        )
+    }
+})
+
+
+var Movie = React.createClass({
+    propTypes: {
+        movie: React.PropTypes.object.isRequired,
+    },
+    render: function () {
+        return (
+            React.createElement("Movie", {
+                    key: this.props.movie.id
+                },
+                React.createElement(MovieTitle, {
+                    movie: this.props.movie.title
+                }),
+                React.createElement(MovieDescription, {
+                    desc: this.props.movie.desc
+                }),
+                React.createElement(MovieImage, {
+                    image: this.props.movie.image
+                })
+            )
+        );
+    }
+});
+
+//Za pomocą metody createElement tworzymy obiekt, który w Reakcie nazywa się ReactElement. Metoda ta przyjmuje trzy parametry:
+//nazwę klasy, na podstawie której ma zostać stworzony element,
+//propsy, czyli właściwości danego elementu (wejścia),
+//dzieci elementu, czyli to, co ma się znaleźć wewnątrz. Może to być zarówno tekst, jak i kolejny ReactElement.
 
 var element =
     React.createElement('div', {},
-        React.createElement('h1', {}, 'Best of the movies'),
-        React.createElement('ul', {}, moviesElements)
+        React.createElement('h1', {}, 'Lista filmów'),
+        React.createElement(MoviesList, {
+            list: movies
+        })
     );
 
 //Za pomocą metody createElement tworzymy obiekt
